@@ -1,0 +1,226 @@
+
+<div id="app"></div>
+<script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_ZmFuY3ktc3F1aXJyZWwtMzUuY2xlcmsuYWNjb3VudHMuZGV2JA"
+        src="https://fancy-squirrel-35.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"></script>
+
+<script>
+    window.addEventListener('load', async function () {
+      // Load the Clerk.js library
+      await Clerk.load();
+
+      // Function to send user data to the backend
+      async function sendUserDataToBackend(user) {
+        // Collect user data
+        const userData = {
+          id: user.id,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          email_addresses: user.emailAddresses,
+          profile_image_url: user.imageUrl // Fetch user's profile image URL
+        };
+
+<!--        console.log("Sending user data to backend:", userData);-->
+
+        try {
+          // Sending user data to backend via POST request
+          const response = await fetch('http://localhost:3000/api/v1/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json' // Send data as JSON
+            },
+            body: JSON.stringify(userData) // Convert user data to JSON
+          });
+
+          // Parse and log the response from the backend
+          const result = await response.json();
+          console.log("Response from backend:", result);
+        } catch (error) {
+          // Handle errors
+          console.error("Error sending user data:", error);
+        }
+      }
+
+      // Check if the user is logged in
+      if (Clerk.user) {
+        // If the user is logged in, send their data to the backend
+        sendUserDataToBackend(Clerk.user);
+
+        // Render User Button for the logged-in user
+        document.getElementById('app').innerHTML = `
+          <div id="user-button"></div>
+        `;
+
+        const userButtonDiv = document.getElementById('user-button');
+        Clerk.mountUserButton(userButtonDiv);  // Mount User Button for logged-in user
+
+      } else {
+        // If the user is not logged in, show the Sign Up / Sign In forms
+
+        // Create container elements for both authrs forms
+        const authContainer = document.createElement('div');
+        authContainer.className = 'auth-container';
+        authContainer.innerHTML = `
+          <div class="auth-tabs">
+            <button id="signInTab" class="auth-tab active">Sign In</button>
+            <button id="signUpTab" class="auth-tab">Sign Up</button>
+          </div>
+          <div id="signInForm" class="auth-form"></div>
+          <div id="signUpForm" class="auth-form" style="display: none;"></div>
+        `;
+
+        // Add auth container to the page
+        document.getElementById('app').appendChild(authContainer);
+
+        // Mount Clerk components for Sign In and Sign Up forms
+        Clerk.mountSignIn(document.getElementById('signInForm'));
+        Clerk.mountSignUp(document.getElementById('signUpForm'));
+
+        // Handle tab switching between Sign In and Sign Up forms
+        document.getElementById('signInTab').addEventListener('click', () => {
+          // Show the Sign In form and hide the Sign Up form
+          document.getElementById('signInForm').style.display = 'block';
+          document.getElementById('signUpForm').style.display = 'none';
+          // Highlight the active tab
+          document.getElementById('signInTab').classList.add('active');
+          document.getElementById('signUpTab').classList.remove('active');
+        });
+
+        document.getElementById('signUpTab').addEventListener('click', () => {
+          // Show the Sign Up form and hide the Sign In form
+          document.getElementById('signInForm').style.display = 'none';
+          document.getElementById('signUpForm').style.display = 'block';
+          // Highlight the active tab
+          document.getElementById('signInTab').classList.remove('active');
+          document.getElementById('signUpTab').classList.add('active');
+        });
+
+        // Add basic styles for the auth forms and tabs
+        const styles = `
+          .auth-container {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 1rem;
+          }
+
+          .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+          }
+
+          .auth-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+          }
+
+          .auth-tab.active {
+            border-bottom-color: #2563eb;
+            color: #2563eb;
+          }
+          .auth-form {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+          }
+        `;
+        // Add the styles to the document
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = styles;
+        document.head.appendChild(styleSheet);
+      }
+    });
+</script>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Clerk Authentication</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div id="app" >-->
+<!--</div>-->
+
+<!--<script-->
+<!--        async-->
+<!--        crossorigin="anonymous"-->
+<!--        data-clerk-publishable-key="pk_test_ZmFuY3ktc3F1aXJyZWwtMzUuY2xlcmsuYWNjb3VudHMuZGV2JA"-->
+<!--        src="https://fancy-squirrel-35.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"-->
+<!--        type="text/javascript"></script>-->
+
+<!--<script>-->
+<!--    window.addEventListener('load', async function () {-->
+<!--        await Clerk.load({ publishableKey: "pk_test_ZmFuY3ktc3F1aXJyZWwtMzUuY2xlcmsuYWNjb3VudHMuZGV2JA" });-->
+<!--        const appDiv = document.getElementById('app');-->
+
+<!--        // Function to send user data to backend-->
+<!--        async function sendUserDataToBackend(user) {-->
+<!--            const userData = {-->
+<!--                id: user.id,-->
+<!--                first_name: user.firstName,-->
+<!--                last_name: user.lastName,-->
+<!--                email_addresses: user.emailAddresses-->
+<!--            };-->
+<!--            console.log("Sending user data to backend:", userData);-->
+<!--            try {-->
+<!--                const response = await fetch('http://localhost:3000/api/v1/users', {-->
+<!--                    method: 'POST',-->
+<!--                    headers: {-->
+<!--                        'Content-Type': 'application/json'-->
+<!--                    },-->
+<!--                    body: JSON.stringify(userData)-->
+<!--                });-->
+<!--                const result = await response.json();-->
+<!--                console.log("Response from backend:", result);-->
+<!--            } catch (error) {-->
+<!--                console.error("Error sending user data:", error);-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Check if user is logged in-->
+<!--        if (Clerk.user) {-->
+<!--            appDiv.innerHTML = `<div id="user-button"></div>`;-->
+<!--            Clerk.mountUserButton(document.getElementById("user-button"));-->
+
+<!--            sendUserDataToBackend(Clerk.user); // Send user data to backend-->
+<!--        } else {-->
+<!--            // Show SignIn and SignUp options-->
+<!--            appDiv.innerHTML = `-->
+<!--                <div id="sign-in"></div>-->
+<!--                <div id="sign-up"></div>-->
+<!--            `;-->
+<!--&lt;!&ndash;            Clerk.mountSignIn(document.getElementById("sign-in"));&ndash;&gt;-->
+<!--            Clerk.mountSignUp(document.getElementById("sign-up"));-->
+<!--        }-->
+
+<!--        // Listen for authentication changes-->
+<!--        Clerk.addListener("auth:change", async () => {-->
+<!--            if (Clerk.user) {-->
+<!--                appDiv.innerHTML = `<div id="user-button"></div>`;-->
+<!--                Clerk.mountUserButton(document.getElementById("user-button"));-->
+<!--                sendUserDataToBackend(Clerk.user);-->
+<!--            } else {-->
+<!--                appDiv.innerHTML = `-->
+<!--                    <div id="sign-in"></div>-->
+<!--                    <div id="sign-up"></div>-->
+<!--                `;-->
+<!--                await Clerk.signOut();-->
+<!--                Clerk.mountSignIn(document.getElementById("sign-in"));-->
+<!--                Clerk.mountSignUp(document.getElementById("sign-up"));-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
