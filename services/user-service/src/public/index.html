@@ -1,4 +1,3 @@
-
 <div id="app"></div>
 <script
         async
@@ -8,61 +7,77 @@
         type="text/javascript"></script>
 
 <script>
-    window.addEventListener('load', async function () {
-      // Load the Clerk.js library
+    window.addEventListener("load", async function () {
+      // Load Clerk.js Library
       await Clerk.load();
 
-      // Function to send user data to the backend
+      // Function to send user data to backend
       async function sendUserDataToBackend(user) {
-        // Collect user data
         const userData = {
           id: user.id,
           first_name: user.firstName,
           last_name: user.lastName,
           email_addresses: user.emailAddresses,
-          profile_image_url: user.imageUrl // Fetch user's profile image URL
+          profile_image_url: user.imageUrl,
         };
 
-<!--        console.log("Sending user data to backend:", userData);-->
-
         try {
-          // Sending user data to backend via POST request
-          const response = await fetch('http://localhost:3000/api/v1/users', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json' // Send data as JSON
-            },
-            body: JSON.stringify(userData) // Convert user data to JSON
+          const response = await fetch("http://localhost:3000/api/v1/users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData),
           });
 
-          // Parse and log the response from the backend
           const result = await response.json();
           console.log("Response from backend:", result);
         } catch (error) {
-          // Handle errors
           console.error("Error sending user data:", error);
         }
       }
 
       // Check if the user is logged in
       if (Clerk.user) {
-        // If the user is logged in, send their data to the backend
+        // Send user data to backend
         sendUserDataToBackend(Clerk.user);
 
-        // Render User Button for the logged-in user
-        document.getElementById('app').innerHTML = `
+        // Inject UI for logged-in user
+        document.getElementById("app").innerHTML = `
           <div id="user-button"></div>
+          <button id="get-user">Get User</button>
+          <div id="user-info"></div>
         `;
+        // Mount Clerk user button
+        Clerk.mountUserButton(document.getElementById("user-button"));
 
-        const userButtonDiv = document.getElementById('user-button');
-        Clerk.mountUserButton(userButtonDiv);  // Mount User Button for logged-in user
+        // Fetch token securely
+        const token = await Clerk.session.getToken();
 
+        // Add event listener after DOM update
+        document.getElementById("get-user").addEventListener("click", async () => {
+          try {
+            const response = await fetch("http://localhost:3000/api/v1/users/me", {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to fetch user data");
+            }
+
+            const userData = await response.json();
+            document.getElementById("user-info").innerText = JSON.stringify(userData, null, 2);
+          } catch (error) {
+            console.error("Error fetching user:", error);
+            document.getElementById("user-info").innerText = "Failed to fetch user data.";
+          }
+        });
       } else {
-        // If the user is not logged in, show the Sign Up / Sign In forms
-
-        // Create container elements for both authrs forms
-        const authContainer = document.createElement('div');
-        authContainer.className = 'auth-container';
+        // If not logged in, show Sign In / Sign Up UI
+        const authContainer = document.createElement("div");
+        authContainer.className = "auth-container";
         authContainer.innerHTML = `
           <div class="auth-tabs">
             <button id="signInTab" class="auth-tab active">Sign In</button>
@@ -72,67 +87,36 @@
           <div id="signUpForm" class="auth-form" style="display: none;"></div>
         `;
 
-        // Add auth container to the page
-        document.getElementById('app').appendChild(authContainer);
+        document.getElementById("app").appendChild(authContainer);
 
-        // Mount Clerk components for Sign In and Sign Up forms
-        Clerk.mountSignIn(document.getElementById('signInForm'));
-        Clerk.mountSignUp(document.getElementById('signUpForm'));
+        // Mount Clerk components
+        Clerk.mountSignIn(document.getElementById("signInForm"));
+        Clerk.mountSignUp(document.getElementById("signUpForm"));
 
-        // Handle tab switching between Sign In and Sign Up forms
-        document.getElementById('signInTab').addEventListener('click', () => {
-          // Show the Sign In form and hide the Sign Up form
-          document.getElementById('signInForm').style.display = 'block';
-          document.getElementById('signUpForm').style.display = 'none';
-          // Highlight the active tab
-          document.getElementById('signInTab').classList.add('active');
-          document.getElementById('signUpTab').classList.remove('active');
+        // Handle tab switching
+        document.getElementById("signInTab").addEventListener("click", () => {
+          document.getElementById("signInForm").style.display = "block";
+          document.getElementById("signUpForm").style.display = "none";
+          document.getElementById("signInTab").classList.add("active");
+          document.getElementById("signUpTab").classList.remove("active");
         });
 
-        document.getElementById('signUpTab').addEventListener('click', () => {
-          // Show the Sign Up form and hide the Sign In form
-          document.getElementById('signInForm').style.display = 'none';
-          document.getElementById('signUpForm').style.display = 'block';
-          // Highlight the active tab
-          document.getElementById('signInTab').classList.remove('active');
-          document.getElementById('signUpTab').classList.add('active');
+        document.getElementById("signUpTab").addEventListener("click", () => {
+          document.getElementById("signInForm").style.display = "none";
+          document.getElementById("signUpForm").style.display = "block";
+          document.getElementById("signInTab").classList.remove("active");
+          document.getElementById("signUpTab").classList.add("active");
         });
 
-        // Add basic styles for the auth forms and tabs
+        // Inject styles dynamically
         const styles = `
-          .auth-container {
-            max-width: 400px;
-            margin: 2rem auto;
-            padding: 1rem;
-          }
-
-          .auth-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-          }
-
-          .auth-tab {
-            padding: 0.5rem 1rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-          }
-
-          .auth-tab.active {
-            border-bottom-color: #2563eb;
-            color: #2563eb;
-          }
-          .auth-form {
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-          }
+          .auth-container { max-width: 400px; margin: 2rem auto; padding: 1rem; }
+          .auth-tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+          .auth-tab { padding: 0.5rem 1rem; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; }
+          .auth-tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+          .auth-form { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 1rem; }
         `;
-        // Add the styles to the document
-        const styleSheet = document.createElement('style');
+        const styleSheet = document.createElement("style");
         styleSheet.textContent = styles;
         document.head.appendChild(styleSheet);
       }

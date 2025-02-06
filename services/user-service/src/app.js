@@ -13,14 +13,7 @@ const app = express();
 //middlewares
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'https://app.neweb.ai',
-      'https://neweb.ai',
-      'https://neweb.ai/',
-      'https://app.neweb.ai/',
-    ],
+    origin: ["*"],
     methods: ['GET', 'POST', 'UPDATE', 'DELETE'],
     credentials: true,
   }),
