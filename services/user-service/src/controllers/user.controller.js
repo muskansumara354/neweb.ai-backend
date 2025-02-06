@@ -2,6 +2,15 @@ const axios = require('axios');
 const User = require('../models/user.model');
 const catchAsync = require("express-async-handler"); // 1. Wrapper to handle async errors
 
+
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
+
 // Controller function to create a new user
 const createNewUser = catchAsync(async (req, res, next) => {
 //  console.log(req.body)
@@ -36,6 +45,23 @@ const createNewUser = catchAsync(async (req, res, next) => {
 });
 
 
+const getUser = catchAsync(async (req, res, next) => {
+  const { userId } = req.auth;
+//  console.log('userId', userId);
+  if (!req.auth || !req.auth.userId) {
+        return next(new AppError('Unauthorized Access! Please log in.', 401));
+      }
+  const user = await User.findOne({ clerkId: userId });
+  if (!user) {
+    return next(new AppError('No Such User Exists or Has Been Deleted!!', 404));
+  }
+  res.status(200).json({
+    status: 'Success',
+    user,
+  });
+});
+
 module.exports = {
   createNewUser,
+  getUser
 };
