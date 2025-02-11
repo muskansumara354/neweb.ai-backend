@@ -3,14 +3,6 @@ const User = require('../models/user.model');
 const catchAsync = require("express-async-handler"); // 1. Wrapper to handle async errors
 
 
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
-
 // Controller function to create a new user
 const createNewUser = catchAsync(async (req, res, next) => {
 //  console.log(req.body)
@@ -59,6 +51,7 @@ const getUser = catchAsync(async (req, res, next) => {
     user,
   });
 });
+
 module.exports = {
   createNewUser,
   getUser
