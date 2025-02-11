@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 dotenv.config({ path: './src/config/config.env' });
 const app = require('./app');
 
-
 mongoose
   .connect(process.env.DATABASE_CONNECTION_STRING)
   .then((val) => {
@@ -18,6 +17,7 @@ mongoose
 app.get("/", (req, res) => {
     res.sendFile(__dirname+"/public/index.html");
 });
+
 port=3000
 //server code
 const server = app.listen(port, () => {
