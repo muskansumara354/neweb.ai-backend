@@ -7,6 +7,7 @@ const catchAsync = require("express-async-handler"); // 1. Wrapper to handle asy
 const createNewUser = catchAsync(async (req, res, next) => {
 //  console.log(req.body)
   const { id, email_addresses, first_name, last_name, profile_image_url } = req.body;
+//  console.log(email_addresses)
   // Check if the user already exists in the database
   const existingUser = await User.findOne({ clerkId: id }).lean();
   // 2. `.lean()` returns a plain JavaScript object instead of a Mongoose document, improving performance for read-only queries.
@@ -36,6 +37,7 @@ const createNewUser = catchAsync(async (req, res, next) => {
   res.status(201).json({ message: 'User created successfully' });
 });
 
+
 const getUser = catchAsync(async (req, res, next) => {
   const { userId } = req.auth;
   console.log('userId', userId);
@@ -52,7 +54,16 @@ const getUser = catchAsync(async (req, res, next) => {
   });
 });
 
+
+const DeleteUser = catchAsync(async (req, res, next) => {
+  const { clerkId } = req.params;
+  const user = await User.findOneAndDelete({ clerkId });
+  if (!user) return next(new AppError('User not found', 404));
+  res.status(204);
+});
+
 module.exports = {
   createNewUser,
-  getUser
+  getUser,
+  DeleteUser
 };

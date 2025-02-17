@@ -1,4 +1,4 @@
-import { UserButton, useUser } from '@clerk/clerk-react';
+import { UserButton, useUser , useAuth } from '@clerk/clerk-react';
 import { Layout, Plus } from 'lucide-react';
 import { useState , useEffect } from 'react';
 import { sendUserData } from '../api/user-api';
@@ -13,13 +13,37 @@ interface Website {
 export function Dashboard() {
   const { user , isLoaded} = useUser();
   const [websites, setWebsites] = useState<Website[]>([]);
+  const {getToken}=useAuth();
 
+     useEffect(() => {
+        if (isLoaded && user) {
+          const userData = {
+              id:user.id ,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email_addresses: user.emailAddresses
+            }
+// console.log(user)
           // Use the API function to send user data to the backend
-
+//           sendUserData(userData)
+//             .then((data) => {
+//               console.log('User data sent successfully:', data);
+//             })
+//             .catch((error) => {
+//               console.error('Error sending user data:', error);
+//             });
+        }
+      }, [isLoaded, user]);
 
   if (!isLoaded || !user) {
       return <div>Loading user information...</div>;
     }
+
+  const fetchToken = async () => {
+    const token = await getToken();
+    console.log("Session Token:", token);
+  };
+  fetchToken()
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm transition-all duration-300 hover:shadow-md">
