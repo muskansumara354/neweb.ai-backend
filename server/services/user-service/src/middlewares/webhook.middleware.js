@@ -1,7 +1,7 @@
 // middlewares/webhookMiddleware.js
 
 const { Webhook } = require('svix');
-const AppError = require("../utils/AppError")
+const AppError = require("../utils/app_error")
 
 
 const verifyWebhookSignature = async (req, res, next) => {

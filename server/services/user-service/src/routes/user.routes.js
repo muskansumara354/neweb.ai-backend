@@ -6,9 +6,14 @@ const router = express.Router();
 router
   .route('/')
   .post(userController.createNewUser)
+  .get(userController.getAllUsers)
 router
     .route('/me')
     .get(requireAuth(), userController.getUser)
+
+router.post("/email",userController.getUserByEmail)
+
+
 
 module.exports = router;
 

@@ -1,8 +1,7 @@
-// controllers/webhookController.js
 
 const User = require('../models/user.model');
 const catchAsync = require("express-async-handler");
-const AppError = require("../utils/AppError")
+const AppError = require("../utils/app_error")
 
 const webhookController = {
 
@@ -14,6 +13,7 @@ const webhookController = {
       last_name,
       image_url
     } = req.webhookEvent.data;
+    console.log(req.webhookEvent.data)
 
     // Get primary email
     const primaryEmail = email_addresses.find(email => email.id === req.webhookEvent.data.primary_email_address_id);
@@ -107,6 +107,7 @@ const webhookController = {
 
     switch (event.type) {
       case 'user.created':
+      console.log("user created")
         return await webhookController.handleUserCreated(req, res, next);
       case 'user.updated':
         return await webhookController.handleUserUpdated(req, res, next);
