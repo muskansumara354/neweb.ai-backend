@@ -5,6 +5,7 @@ const AppError = require("../utils/app_error");
 const APIFeatures = require("../utils/api_features"); // Importing APIFeatures
 const Email = require('../utils/email');
 // Controller function to create a new user
+
 const createNewUser = catchAsync(async (req, res, next) => {
   const { id, email_addresses, first_name, last_name, profile_image_url } = req.body;
 
@@ -181,7 +182,7 @@ console.log(req.body)
   try {
     const user = {
       email: req.body.user_email,
-      fullName: req.body.fullName,
+      fullName: req.body.full_name,
     };
 
     await new Email(user, '').sendContactForm(

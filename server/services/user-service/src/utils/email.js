@@ -22,7 +22,6 @@ class Email {
         port: process.env.EMAIL_PORT,
         auth: false,
         pool: true,
-        maxConnections: 5
       });
     }
     return Email.transporter;
