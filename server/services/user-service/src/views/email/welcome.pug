@@ -1,0 +1,76 @@
+doctype html
+html(lang="en")
+    head
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="Content-Type", content="text/html; charset=UTF-8")
+        title= subject
+        style(media="all", type="text/css").
+            @media all {
+                .btn-primary table td:hover {
+                    background-color: #00C8C8 !important;
+                }
+                .btn-primary a:hover {
+                    background-color: #00C8C8 !important;
+                    border-color: #00C8C8 !important;
+                }
+            }
+            @media only screen and (max-width: 640px) {
+                .main p,
+                .main td,
+                .main span {
+                    font-size: 16px !important;
+                }
+                .wrapper {
+                    padding: 8px !important;
+                }
+                .container {
+                    padding: 0 !important;
+                    padding-top: 8px !important;
+                    width: 100% !important;
+                }
+                .btn a {
+                    font-size: 16px !important;
+                    max-width: 100% !important;
+                    width: 100% !important;
+                }
+            }
+            @media all {
+                .apple-link a {
+                    color: inherit !important;
+                    text-decoration: none !important;
+                }
+                #MessageViewBody a {
+                    color: inherit;
+                    text-decoration: none;
+                }
+            }
+    body(style="font-family: 'Open Sans', sans-serif; font-size: 16px; line-height: 1.4; background-color: #f4f5f6; margin: 0; padding: 0;")
+        table.body(role="presentation", border="0", cellpadding="0", cellspacing="0", style="border-collapse: separate; width: 100%; background-color: #f4f5f6;", width="100%")
+            tr
+                td.container(style="max-width: 600px; padding: 0; padding-top: 24px; margin: 0 auto; width: 600px;", width="600")
+                    .content(style="display: block; margin: 0 auto; max-width: 600px;")
+                        // START WHITE CONTAINER
+                        span.preheader(style="color: transparent; display: none; height: 0; max-height: 0; opacity: 0; visibility: hidden;") Welcome to Neweb.ai!
+    table.main(role="presentation", style="background: #ffffff; border: 1px solid #eaebed; border-radius: 16px; width: 100%;", width="100%")
+        tr
+            td.wrapper(style="padding: 24px;")
+                h1(style="color: #2F2A3D; font-size: 24px; margin: 0 0 16px;") Welcome to Neweb.ai, #{firstName}!
+                p(style="margin: 0 0 16px; color: #4A445B;") We're thrilled to have you on board! At Neweb.ai, we make website creation fast, simple, and accessible to everyone—no coding required. Our AI-powered platform helps you build professional websites in just a few clicks.
+                p(style="margin: 0 0 16px; color: #4A445B;") Ready to get started? Create your dream website now:
+                table.btn.btn-primary(role="presentation", style="width: 100%; margin-bottom: 16px;")
+                    tbody
+                        tr
+                            td(align="center")
+                                a(href=`${url}`, target="_blank", style="padding: 12px 24px; background-color: #00C8C8; border-radius: 4px; color: #ffffff; font-weight: bold; text-decoration: none;") Get Started
+                p(style="margin: 0 0 16px; color: #4A445B;") Have any questions? We're here to help. Simply reply to this email or check out our support center.
+                p(style="margin: 0 0 16px; color: #4A445B;") Best regards,
+                p(style="margin: 0; color: #4A445B; font-weight: bold;") The Neweb.ai Team
+                        // END WHITE CONTAINER
+                        .footer(style="padding-top: 24px; text-align: center;")
+                            table(role="presentation", width="100%")
+                                tr
+                                    td(style="color: #9a9ea6; text-align: center; font-size: 14px;")
+                                        span.apple-link Neweb.ai, 7-11 Commercial Ct, Belfast BT1 2NB
+                                        br
+                                        | Don't want to receive these emails?
+                                        a(href="https://neweb.ai/unsubscribe", style="color: #9a9ea6;") Unsubscribe

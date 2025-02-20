@@ -13,6 +13,9 @@ router
 
 router.post("/email",userController.getUserByEmail)
 
+router.post("/send-contact-email",userController.sendContactMail)
+
+
 
 
 module.exports = router;

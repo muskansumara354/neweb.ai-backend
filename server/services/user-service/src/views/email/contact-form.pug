@@ -1,0 +1,28 @@
+doctype html
+html(lang="en")
+  head
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="Content-Type", content="text/html; charset=UTF-8")
+    title Contact Form Submission
+  body(style="font-family: 'Open Sans', sans-serif; font-size: 16px; line-height: 1.4; background-color: #f4f5f6; margin: 0; padding: 0;")
+    table.body(role="presentation", border="0", cellpadding="0", cellspacing="0", style="border-collapse: separate; width: 100%; background-color: #f4f5f6;", width="100%")
+      tr
+        td.container(style="max-width: 600px; padding: 0; padding-top: 24px; margin: 0 auto; width: 600px;", width="600")
+          .content(style="display: block; margin: 0 auto; max-width: 600px;")
+            span.preheader(style="color: transparent; display: none; height: 0; max-height: 0; opacity: 0; visibility: hidden;") Contact Form Submission from #{userEmail}
+            table.main(role="presentation", style="background: #ffffff; border: 1px solid #eaebed; border-radius: 16px; width: 100%;", width="100%")
+              tr
+                td.wrapper(style="padding: 24px; background-color: #ffffff;")
+                  h1(style="color: #2F2A3D; font-size: 24px; margin: 0 0 16px;") New Contact Form Submission
+                  p(style="margin: 0 0 16px; color: #4A445B;") You've received a new message from your website's contact form:
+                  p(style="margin: 0 0 16px; color: #4A445B;")
+                    | From: #{userEmail}
+                  p(style="margin: 0 0 16px; color: #4A445B;")
+                    | Message: #{userMessage}
+
+                  p(style="margin: 0; color: #4A445B; font-weight: bold;") The Neweb.ai Team
+              .footer(style="padding-top: 24px; text-align: center;")
+                table(role="presentation", width="100%")
+                  tr
+                    td(style="color: #9a9ea6; text-align: center; font-size: 14px;")
+                      span.apple-link Neweb.ai,
